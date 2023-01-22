@@ -1,0 +1,118 @@
+﻿@model BrandNewDay.Bank.Web.MVC.Website.Areas.Identity.Data.BrandNewDayBankUser
+@{
+    var defaultAccount = ViewData["bankAccount"] as BrandNewDay.Bank.Web.MVC.Website.Areas.Identity.Data.BankAccount;
+}
+
+@if (defaultAccount != null)
+{
+    <div class="row">
+        <div class="col-5">
+            <div class="card">
+                <div class="card-header">
+                    @Model.Email (@Model.CountryCode)
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Iban: <span>@defaultAccount.IbanNumber</h5>
+                    <p class="card-text text-end">Account Balance: <span class="acc-balance text-info fs-4 fw-bolder">@defaultAccount.Balance.ToString("N3")</span></p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li id="btn-open-deposit-modal" class="list-group-item">Deposit</li>
+                    <li id="btn-open-transfer-modal" class="list-group-item">Transfers</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    @section modal{
+
+    <div id="deposit-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Deposit</h5>
+                    <button type="button" class="btn-close-modal btn btn-sm" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Account Balance</label>
+                            <input id="txt-current-balance" class="form-control text-end" value="@defaultAccount.Balance.ToString("N3")" disabled />
+                        </div>
+                    </div>
+                    <hr />
+                     <div class="row mt-2">
+                        <div class="col-12">
+                            <label>Deposit Amount:</label>
+                            <input id="txt-deposit-amount" class="form-control text-end" value="0.000" />
+                        </div>
+                    </div>
+                     <div class="row mt-2">
+                        <div class="col-12">
+                            <label>Deposit Fee <span class="text-sm">(Rate: 0.1%)</span></label>
+                            <input id="txt-deposit-fee" class="form-control text-end text-warning" value="0.000" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-confirm-deposit" type="button" class="btn btn-primary">Confirm</button>
+                    <button type="button" class="btn-close-modal btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <div id="transfer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Transfer</h5>
+                    <button type="button" class="btn-close-modal btn btn-sm" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Account Balance</label>
+                            <input id="txt-tf-current-balance" class="form-control text-end" value="@defaultAccount.Balance.ToString("N3")" disabled />
+                        </div>
+                    </div>
+                    <hr />
+                     <div class="row mt-2">
+                        <div class="col-12">
+                            <label>Enter account no (Iban):</label>
+                            <input id="txt-transfer-iban" class="form-control" maxlength="100" placeholder="Iban" />
+                        </div>
+                    </div>
+                     <div class="row mt-2">
+                        <div class="col-12">
+                            <label>Transfer Amount:</label>
+                            <input id="txt-transfer-amount" class="form-control text-end" value="0.000" />
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-confirm-transfer" type="button" class="btn btn-primary">Transfer</button>
+                    <button type="button" class="btn-close-modal btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+
+    @section scripts{
+         <script src="~/js/page/bankaccount.my.js" asp-append-version="true"></script>
+    }
+}
+else
+{
+    <div class="alert alert-danger" role="alert">
+        Bank Account not found
+    </div>
+}
+
